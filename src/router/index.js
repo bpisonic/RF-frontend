@@ -1,6 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import 'bootstrap'
 import Home from '../views/Home.vue'
+import NovaObjava from '../views/NovaObjava'
+import Profil from '../views/Profil'
+
+import Kontakt from '@/components/Kontakt'
+import Prijava from '@/components/Prijava'
+import Objava from '@/components/Objava'
+import Registracija from '@/components/Registracija'
 
 Vue.use(VueRouter)
 
@@ -11,12 +19,34 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/nova-objava',
+    name: 'NovaObjava',
+    component: NovaObjava
+  },
+  {
+    path: '/objava',
+    name: 'Objava',
+    component: Objava
+  },
+  {
+    path: '/kontakt',
+    name: 'Kontakt',
+    component: Kontakt
+  },
+  {
+    path: '/profil',
+    name: 'Profil',
+    component: Profil
+  },
+  {
+    path: '/prijava',
+    name: 'Prijava',
+    component: Prijava
+  },
+  {
+    path: '/registracija',
+    name: 'Registracija',
+    component: Registracija
   }
 ]
 
