@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import 'bootstrap'
 import Home from '../views/Home.vue'
 import NovaObjava from '../views/NovaObjava'
 import Profil from '../views/Profil'

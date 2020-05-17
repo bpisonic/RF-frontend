@@ -2,11 +2,8 @@
   <div id="app">
     <nav class="navbar">
       <router-link to="/"><img alt="Vue logo" src="@/assets/logor8.png"></router-link>
-      <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
-      <router-link to="/nova-objava"><button class="objavi">POST</button></router-link>
+      <router-link to="/nova-objava"><button class="objavi">OBJAVI</button></router-link>
+      <router-link to="/profil">Profil</router-link>
       <router-link to="/prijava">Prijava</router-link>
       <router-link to="/registracija">Registracija</router-link> 
     </nav>

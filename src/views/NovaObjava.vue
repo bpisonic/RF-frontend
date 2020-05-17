@@ -1,49 +1,74 @@
 <template>
     <div>
-        
-        <p>Zupanija:</p>
-        <input type="text" class="zupanija" v-model="zupanija">
+      <form action=""> 
+        <select id = "zupanije" class="zupanija">
+          <option value="" disabled selected class="undefined">Županija</option>
+          <option value = "1">Bjelovarsko-bilogorska</option>
+          <option value = "2">Brodsko-posavska</option>
+          <option value = "3">Dubrovačko-neretvanska</option>
+          <option value = "4">Istarska</option>
+          <option value = "5">Karlovačka</option>
+          <option value = "6">Koprivničko-križevačka</option>
+          <option value = "7">Krapinsko-zagorska</option>
+          <option value = "8">Ličko-senjska</option>
+          <option value = "9">Međimurska</option>
+          <option value = "10">Osječko-baranjska</option>
+          <option value = "11">Požeško-slavonska</option>
+          <option value = "12">Primorsko-goranska</option>
+          <option value = "13">Sisačko-moslavačka</option>
+          <option value = "14">Splitsko-dalmatinska</option>
+          <option value = "15">Varaždinska</option>
+          <option value = "16">Virovitičko-podravska</option>
+          <option value = "17">Vukovarsko-srijemska</option>
+          <option value = "18">Zadarska</option>
+          <option value = "19">Zagrebačka</option>
+          <option value = "20">Šibensko-kninska</option>
+          <option value = "21">Grad Zagreb</option>
+        </select><br>
+        <select id="gradovi" class="grad">
+          <option v-for="grad in Gradovi" :key="grad.id">{{odabraniGradovi.name}}</option>
+      </select>
 
-        <p>Grad:</p>
-        <input type="text" class="grad" v-model="grad">
+      <!-- GRADOVI  -->
 
-        <p>Naselje:</p>
-        <input type="text" class="naselje" v-model="naselje">
-
+      
+        <!--<input type="text" class="naselje" placeholder="Naselje">-->
+        <br>
+        <br>
         <p>Cijena:</p>
-        <input type="number" class="od_cijena"> do <input type="number" class="do_cijena" v-model="price"> <br>
+        <input type="number" class="od_cijena"> do <input type="number" class="do_cijena"><br>
 
         <label for="ljubimci" style="word-wrap:break-word">
         Kućni ljubimci:
-        <input type="checkbox" id="ljubimci" v-model="pets">
-        </label> <br>
+        <input type="checkbox" id="ljubimci" class="chkbox">
+        </label><br>
         
         <label for="dostupno" style="word-wrap:break-word">
         Dostupno cijele godine:
-        <input type="checkbox" id="dostupno" v-model="yearAvailable">
-        </label> <br>
+        <input type="checkbox" id="dostupno" class="chkbox">
+        </label><br>
 
         <label for="soba" style="word-wrap:break-word">
         Odvojena soba:
-        <input type="checkbox" id="soba" v-model="seperateRoom">
+        <input type="checkbox" id="soba" class="chkbox">
         </label><br>
 
         <label for="terasa" style="word-wrap:break-word">
         Terasa/balkon:
-        <input type="checkbox" id="terasa" v-model="terasa">
+        <input type="checkbox" id="terasa" class="chkbox">
         </label><br>
 
         <label for="rezije" style="word-wrap:break-word">
         Uključene režije:
-        <input type="checkbox" id="rezije" v-model="utilitiesIncluded">
-        </label>
+        <input type="checkbox" id="rezije" class="chkbox">
+        </label><br>
 
         <p>Opis:</p>
         <input type="text" class="opis"><br>
 
-        <button type="submit" @click="createPost">Objavi</button>
+        <button type="submit" @click="createPost" class="objavi">Objavi</button>
         
-
+      </form> 
 
     </div>
 </template>
@@ -51,22 +76,11 @@
 <script>
 
 
-
+import store from "@/store/store.js"
 
 export default {
     data() {
-        return {
-            price: '',
-            zupanija: '',
-            grad: '',
-            naselje: '',
-            pets: '',
-            yearAvailable: '',
-            seperateRoom: '',
-            terasa: '',
-            utilitiesIncluded: ''
-        
-        }
+        return store
     },
     methods: {
         createPost(){
@@ -145,4 +159,21 @@ export default {
     margin: 10px 10px auto;
     border: 1px #c7c7c7 solid;
   }
+
+  .objavi {
+   
+    color: black;
+    border: 1px #FFBE3D solid;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 100px;
+    height: 27px;
+    background-color:#FFBE3D;
+    font-family: 'catamaran';
+    padding-top: 3px;
+  }
+    .objavi:hover{
+      background-color: #F27405;
+      border-color: #F2A922;
+    } 
 </style>

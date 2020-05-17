@@ -1,11 +1,42 @@
 <template> <!-- OVJDE IDE HOME-->
-  <div class="cointainer">
-    <div class="filter">
+  <div class="box" :style="{'background-image':'url(https://i.ibb.co/TbSNdGd/bg111.jpg)'}">
+    <div class="filter" >
       <p>FILTERI:</p>
       <form action="">
-        <input type="text" class="zupanija" placeholder="Županija">
-        <input type="text" class="grad" placeholder="Grad">
-        <input type="text" class="naselje" placeholder="Naselje">
+        <!-- ŽUPANIJE -->
+        <select @change="odabranaZupanija(value)" id = "zupanije" class="zupanija">
+          <option value="" disabled selected class="undefined">Županija</option>
+          <option value = "1">Bjelovarsko-bilogorska</option>
+          <option value = "2">Brodsko-posavska</option>
+          <option value = "3">Dubrovačko-neretvanska</option>
+          <option value = "4">Istarska</option>
+          <option value = "5">Karlovačka</option>
+          <option value = "6">Koprivničko-križevačka</option>
+          <option value = "7">Krapinsko-zagorska</option>
+          <option value = "8">Ličko-senjska</option>
+          <option value = "9">Međimurska</option>
+          <option value = "10">Osječko-baranjska</option>
+          <option value = "11">Požeško-slavonska</option>
+          <option value = "12">Primorsko-goranska</option>
+          <option value = "13">Sisačko-moslavačka</option>
+          <option value = "14">Splitsko-dalmatinska</option>
+          <option value = "15">Varaždinska</option>
+          <option value = "16">Virovitičko-podravska</option>
+          <option value = "17">Vukovarsko-srijemska</option>
+          <option value = "18">Zadarska</option>
+          <option value = "19">Zagrebačka</option>
+          <option value = "20">Šibensko-kninska</option>
+          <option value = "21">Grad Zagreb</option>
+        </select>
+
+        <select id="gradovi" class="grad">
+          <option v-for="grad in Gradovi" :key="grad.id">{{odabraniGradovi.name}}</option>
+      </select>
+
+      <!-- GRADOVI  -->
+
+      
+        <!--<input type="text" class="naselje" placeholder="Naselje">-->
         <br>
         <br>
         <p>Cijena:</p>
@@ -34,115 +65,59 @@
         <label for="rezije" style="word-wrap:break-word">
         Uključene režije:
         <input type="checkbox" id="rezije" class="chkbox">
-        </label>
+        </label><br>
+
+        <button v-on:click="primjeniFilter" class="filter-btn" type="submit">Traži</button>
       </form>
     </div>
 
-    <!-- <div v-for="post in getAllPostsUseCase" :key="post.id" class="post"> 
-      <img :src="postImage" alt="Post image">
-      <p class="location">{{ getAllPostsUseCase.location }}</p>
-      <p class="price"> {{ getAllPostsUseCase.price }} kn</p>
-     <p class="about"> </p>
-    </div> -->
-
-    <a href="">
-      <div  class="post">
-       <!-- <PostsCard v-for="card in cards" :info="card"/> -->
-      </div>
-    </a>
-
-    <div class="post">
-      SLIKA
-      Lokacija
-      Cijena
-      <hr>
-      Kratki opis
-    </div>
+      <a href="">
+        <div v-for="post in posts" :key="post.id" class="post">
+          SLIKA <br>
+          {{post.grad}} <br>
+          {{post.cijena}},00 kn
+          <hr>
+          {{post.opis}}
+        </div>
+      </a>
 
   </div>
 </template>
 
 <script>
- import PostsCard from '@/components/PostsCard'
- //import store from '@/store'
 
   export default {
     data(){
            
 
             return {
-              // idp:'',
-              // price:'',
-              // location: '',
-              // img:'',
-
-              // posted_at:'',
-              // posted_by:'',
-              // zup:'',
-              // nas:'',
-              // ljub:'',
-              // godina:'',
-              // soba:'',
-              // terasa_balkon:'',
-              // rezije:''
-
-              cards:[
-                {                  
-                    cijena:1245.00,
-                    grad:'pula',
-                    url:'https://picsum.photos/seed/picsum/200/300'
-                },
-                {
-                    cijena:2300.00,
-                    grad:'zagreb',
-                    url:'https://picsum.photos/seed/picsum/200/300'
-                }
-              ]
               
+              posts,
 
             }
-            // return 
-            //    store;
-            
           },
+    computed: {
+      posts(){
+        return this.$store.state.posts
+      },
+
+      odabranaZupanija(value){
+        
+        Gradovi = $store.gradovi.filter((grad)=>(grad.zupanija==value))
+        
+      }
+    },
     methods: {
+      onChangePage(pageOfItems){
+        this.pageOfItems = pageOfItems;
+      },
       logout(){
        // store.authenticated=false
       }
     },
-    computed: {
-      filteredCards() {
-        return this.cards.filter(card =>
-        card.title.includes(store.searchTerm))
-      }
-    },
-    components:
-    {
-      PostsCard
-    },
-    // mounted() {
-    //   this.cards = []
+     mounted() {
 
-    // //p kao promise
-    //   fetch('http://localhost:3000/') //vracamo promise sa fetcha, fetch gleda na http i vraca u varijabli p da ce on to zavrsiti
-    //     .then(response=>{ //lambda funkcija
-    //         return response.json()
-    //       })
-    //     .then(data => {
-    //       console.log('Podaci s backenda', data)
-
-    //       let data2 = data.map(element => {
-    //         return{
-    //           idp: element.id,
-    //           price: element.cijena,
-    //           location: element.grad,
-    //           img: element.source
-    //         }
-    //       })
-
-    //       this.cards=data2;
-    //     })
-    // },
+     },
     
           
   }
@@ -150,15 +125,39 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  div .filter {
-    
+
+  .box {
+    height: 1200px;
+    width: 100%;
+
+  }
+  .filter {
     width: 270px;
     height: 600px;
     border: 2px #F29422 dashed;
     margin: 10px 23px;
+    margin-top: 20px;
     background-color: #ebebeb;
     float: left;
+    opacity: 0.97;
   }
+
+  .filter-btn {
+    margin-left: 100px;
+    margin-top: 40px;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+  }
+
+    .filter-btn:hover{
+      background-color: rgb(255, 167, 59);
+      opacity: 0.8;
+    }
+  
 //remove arrow
  input::-webkit-outer-spin-button,
  input::-webkit-inner-spin-button {
@@ -199,13 +198,21 @@
   }
 
   .post{
+    margin-top: 20px;
     border: 1px #c7c7c7 solid;
     float: left;
-    width: auto;
-    height: auto;
+    width: 490px;
+    height: 350px;
     padding: 20px;
     margin-right: 30px;
     margin-bottom: 30px;
+    background: white;
+    opacity: 0.97;
+
+    //internet
+  
+    position:relative;
+    overflow:hidden;
   }
 
   label {
@@ -216,11 +223,5 @@
     color: inherit;
     text-decoration: none;
   }
-
-  /////////////
- 
-  .card {
-    margin-bottom: 20px;
-    }
 
 </style>

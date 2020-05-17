@@ -18,7 +18,7 @@
                             <li class="txt">Confirm password:</li>
                             <input v-model="confirmPassword" type="password" >
                             
-                            <button @click="register()" class="submit">SUBMIT</button>
+                            <button @click.prevent="register()" class="submit">SUBMIT</button>
                         </ul>
                 </div>
             </div>
@@ -26,9 +26,6 @@
 
 
 <script>
-
-import firebase from 'firebase'
-import baza from '@/DataBase/firestore'
 
 export default {
 
@@ -44,13 +41,11 @@ export default {
     },
     methods: {
         register(){
-            firebase.auth().createUserWithEmailAndPassword(this.email,
-            this.password).catch(function(error) {
-                console.log(error);
-            });
+            
         }
-    },
+    }
 }
+
 </script>
 
 
