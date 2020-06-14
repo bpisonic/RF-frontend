@@ -145,7 +145,7 @@ import { Service, Posts, User, auth } from '@/services/index.js'
           let res = await Posts.getAll()
           this.posts = res
           
-          let zupanijaStr = this.$store.zupanijeIdToStr[this.vrijednostZupanije]
+          let zupanijaStr = this.vrijednostZupanije
           if(zupanijaStr === '') {
             this.posts = [];
             return;
@@ -157,13 +157,13 @@ import { Service, Posts, User, auth } from '@/services/index.js'
             console.log("post:", post)
 
             return post.cijena >= this.cijenaOd && post.cijena <= this.cijenaDo && 
-                  ((zupanijaStr.toLowerCase() === '') ? (true) : (post.zupanija === zupanijaStr.toLowerCase())) &&
-                  ((this.grad.toLowerCase() === '') ? (true) : (post.grad === this.grad.toLowerCase())) &&
+                  ((zupanijaStr == '') ? (true) : (post.zupanija === zupanijaStr)) &&
+                  ((this.grad === '') ? (true) : (post.grad === this.grad)) &&
                   ((this.ljubimci === false) ? (true) : (post.ljubimci === this.ljubimci)) &&
                   ((this.dostupno === false) ? (true) : (post.dostupnoGod === this.dostupno)) &&
                   ((this.soba === false) ? (true) : (post.odvojenaSoba === this.soba)) &&
                   ((this.rezije === false) ? (true) : (post.ukljuceneRezije === this.rezije)) &&
-                  ((this.terasa === false) ? (true) : (post.terasa === this.terasa));          
+                  ((this.terasa === false) ? (true) : (post.terasa === this.terasa));         
         });
         console.log("post: ",post.grad)
 
