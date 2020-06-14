@@ -1,38 +1,61 @@
 <template>
-    <div class="box">
-                <div>
-                    {{error}}
-                </div>
+    <div class="box" :style="{'background-image':'url(https://i.ibb.co/TbSNdGd/bg111.jpg)'}">
                 <div class="login">
-                    <p class="txt">Log In:</p>
+                    <form @submit.prevent="login" method="get">
+                    <p class="txt">Prijava:</p>
                         <ul>
                             <li class="txt">Email:</li>
-                            <input v-model="email" type="email" class="enter-email" required>
+                            <input placeholder="primjer@gmail.com" v-model="body.email" type="email" class="enter-email" required>
 
-                            <li class="txt">Password:</li>
-                            <input v-model="password" type="password" class="enter-pw" required><br>
+                            <li class="txt">Lozinka:</li>
+                            <input placeholder="Lozinka" v-model="body.password" type="password" class="enter-pw" required><br>
 
-                            <button @click.prevent="login()" class="submit">LOG IN</button>
+                            <input @click.prevent="login()" type="submit" value ="PRIJAVA" class="submit">
                         </ul>
+                    </form>
                 </div>
-            </div>
+    </div>
 </template>
 
 
 <script>
-
+import {User} from '@/services/index'
+import store from '@/store/store'
 export default {
+    name: 'Prijava',
     data() {
         return {
-            email: '',
-            password: '',
-            error: ''
+            body:{
+                email: '',
+                password: '',
+                username: ''
+            },
+            error: '',
+            store
         }
     },
     methods:{
-        login(){
-    
-            
+        async login(){
+            try {
+                let res = await User.Prijava(this.body)
+                this.$store.user = true
+                console.log('hoce1')
+                this.$store.token = res.data.token
+                                console.log('hoce2')
+                                console.log(this.$store.user)
+
+                this.$store.username = res.data.user.username
+                                console.log('hoce3')
+
+                console.log(this.$store.username)
+                                console.log('hoce4')
+
+                await localStorage.setItem("token", res.data.token);
+                this.$router.push('Profil')
+            } catch (error) {
+                this.error = error
+                console.log(error)
+            }  
             
         }
     }    
@@ -42,13 +65,22 @@ export default {
 
 <style scoped>
 
+.box {
+    height: 836px;
+    width: 100%;
+    padding-top: 70px;
+
+  }
+
 div .login{
     border: 1px #8a8a8a solid;
-    width: 400px;
+    width: 450px;
     height: auto;
     padding: 20px;
     margin: auto;
     margin-top:50px;
+    background-color: #ebebeb;
+    opacity: 0.9;
 }
 
 
@@ -62,7 +94,7 @@ div ul li {
     input {
         border: 1px #8a8a8a solid;
         border-radius: 15px;
-        width: 250px;
+        width: 320px;
         height: 25px;
         padding-left: 10px;
         margin:auto;

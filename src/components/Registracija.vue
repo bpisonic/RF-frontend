@@ -1,47 +1,66 @@
 <template>
-     <div class="box">
-                <div>
-                    {{errorMess}}
-                </div>
+     <div class="box" :style="{'background-image':'url(https://i.ibb.co/TbSNdGd/bg111.jpg)'}">
                 <div class="signup">
-                    <p class="txt">Create an account:</p>
-                        <ul>
-                            <li class="txt">Email:</li>
-                            <input v-model="email" type="email" >
+                    <form @submit.prevent="register" method="post"> 
+                        <p class="txt">Kreirajte račun:</p>
+                            <ul>
+                                <li class="txt">Email:</li>
+                                <input v-model="body.email" type="email" placeholder="primjer@mail.com">
 
-                            <li class="txt">Username:</li>
-                            <input v-model="username" type="username" >
+                                <li class="txt">Korisničko ime:</li>
+                                <input v-model="body.username" type="username" placeholder="Korisnik123">
 
-                            <li class="txt">Password:</li>
-                            <input v-model="password" type="password" >
+                                <li class="txt">Lozinka:</li>
+                                <input v-model="body.password" type="password" placeholder="Lozinka">
 
-                            <li class="txt">Confirm password:</li>
-                            <input v-model="confirmPassword" type="password" >
-                            
-                            <button @click.prevent="register()" class="submit">SUBMIT</button>
-                        </ul>
+                                <li class="txt">Potvrda lozinke:</li>
+                                <input v-model="confirmPassword" type="password" placeholder="Potvrda lozinke">
+                                
+                                <!--<button @click.prevent="register()" class="submit">SUBMIT</button> -->
+                                <input class ="submitt" type="submit"  value="POTVRDI">
+                            </ul>
+                    </form>
                 </div>
             </div>
 </template>
 
 
 <script>
+import  {User}  from '@/services/index.js';
 
 export default {
 
-
+    name: 'Registracija',
     data() {
         return {
-            email: '',
-            username: '',
-            password: '',
+            body:{
+                email: '',
+                username: '',
+                password: '',
+            },
             confirmPassword: '',
-            errorMess: ''
+            error: '',
+            //pw:'password'
         }
     },
     methods: {
-        register(){
-            
+        async register(){
+            if(this.body.password != this.confirmPassword) return this.error = "Lozinke se moraju podudarati!"
+            try {
+                let res = await User.register(this.body)
+                console.log("res.data: ", res.data)
+                this.$store.user = true
+                this.$store.token = res.data.token
+                this.$store.username = res.data.user.username
+                console.log(this.$store.user.username)
+                localStorage.setItem("token", res.data.token);
+                this.$router.push('Profil')
+                console.log(res);
+            } catch (error) {
+                this.error = error
+                console.log(error)
+                
+            }
         }
     }
 }
@@ -50,13 +69,25 @@ export default {
 
 
 <style scoped>
+
+.box {
+    height: 836px;
+    width: 100%;
+    padding-top: 70px;
+
+  }
+
+
 div .signup{
     border: 1px #8a8a8a solid;
-    width: 400px;
+    width: 450px;
     height: auto;
     padding: 20px;
     margin: auto;
     margin-top:50px;
+    
+    background-color: #ebebeb;
+    opacity: 0.9;
 }
 
 
@@ -70,17 +101,18 @@ div ul li {
     input {
         border: 1px #8a8a8a solid;
         border-radius: 15px;
-        width: 250px;
+        width: 300px;
         height: 25px;
         padding-left: 10px;
         margin:auto;
+        margin-top: 10px;
         
     }
 
-    .submit {
+    .submitt {
         
         border-radius: 15px;
-        margin-top: 20px;
+        margin-top: 30px;
         width: 100px;
         height: 25px;
         background-color:#FFBE3D;

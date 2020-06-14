@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Home from '../views/Home.vue'
 import NovaObjava from '../views/NovaObjava'
 import Profil from '../views/Profil'
@@ -11,7 +12,7 @@ import Registracija from '@/components/Registracija'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
@@ -23,7 +24,7 @@ Vue.use(VueRouter)
     component: NovaObjava
   },
   {
-    path: '/objava',
+    path: '/objava/:id',
     name: 'Objava',
     component: Objava
   },

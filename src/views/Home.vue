@@ -3,8 +3,7 @@
     <div class="filter" >
       <p>FILTERI:</p>
       <form action="">
-        <!-- ŽUPANIJE -->
-        <select @change="odabranaZupanija(value)" id = "zupanije" class="zupanija">
+        <select @click="odabranaZupanija()" v-model="vrijednostZupanije" id = "zupanije" class="zupanija">
           <option value="" disabled selected class="undefined">Županija</option>
           <option value = "1">Bjelovarsko-bilogorska</option>
           <option value = "2">Brodsko-posavska</option>
@@ -29,94 +28,156 @@
           <option value = "21">Grad Zagreb</option>
         </select>
 
-        <select id="gradovi" class="grad">
-          <option v-for="grad in Gradovi" :key="grad.id">{{odabraniGradovi.name}}</option>
+      <select v-model="grad" id="gradovi" class="grad">
+          <option v-for="grad in gradovi" :value="grad.grad" :key="grad.id">{{grad.grad}}</option>
       </select>
-
-      <!-- GRADOVI  -->
-
-      
+       
         <!--<input type="text" class="naselje" placeholder="Naselje">-->
         <br>
         <br>
-        <p>Cijena:</p>
-        <input type="number" class="od_cijena"> do <input type="number" class="do_cijena">
+        <p>Cijena (kn):</p>
+        <input v-model="cijenaOd" type="number" class="od_cijena"> do <input v-model="cijenaDo" type="number" class="do_cijena">
 
         <label for="ljubimci" style="word-wrap:break-word">
         Kućni ljubimci:
-        <input type="checkbox" id="ljubimci" class="chkbox">
+        <input v-model="ljubimci" type="checkbox" id="ljubimci" class="chkbox">
         </label>
         
         <label for="dostupno" style="word-wrap:break-word">
         Dostupno cijele godine:
-        <input type="checkbox" id="dostupno" class="chkbox">
+        <input v-model="dostupno" type="checkbox" id="dostupno" class="chkbox">
         </label>
 
         <label for="soba" style="word-wrap:break-word">
         Odvojena soba:
-        <input type="checkbox" id="soba" class="chkbox">
+        <input v-model="soba" type="checkbox" id="soba" class="chkbox">
         </label><br>
 
         <label for="terasa" style="word-wrap:break-word">
         Terasa/balkon:
-        <input type="checkbox" id="terasa" class="chkbox">
+        <input v-model="terasa" type="checkbox" id="terasa" class="chkbox">
         </label><br>
 
         <label for="rezije" style="word-wrap:break-word">
         Uključene režije:
-        <input type="checkbox" id="rezije" class="chkbox">
+        <input v-model="rezije" type="checkbox" id="rezije" class="chkbox">
         </label><br>
 
-        <button v-on:click="primjeniFilter" class="filter-btn" type="submit">Traži</button>
-      </form>
+      <button v-on:click.prevent="primjeniFilter()" class="filter-btn" type="submit">Traži</button>
+     </form>
     </div>
 
-      <a href="">
-        <div v-for="post in posts" :key="post.id" class="post">
-          SLIKA <br>
-          {{post.grad}} <br>
-          {{post.cijena}},00 kn
-          <hr>
-          {{post.opis}}
-        </div>
-      </a>
-
+    <router-link :to="{ name: 'Objava', params: { id: post._id }}" v-for="post in posts" :key="post._id" class="post">
+        <br>
+        {{post.grad}} <br>
+        {{post.cijena}},00 kn
+        <hr>
+        {{post.opis}}
+    </router-link> 
+            <!-- {{ `${post.createdAt.getDate()}/${post.createdAt.getMonth()}/${post.createdAt.getFullYear()}`}} -->
+       
+                <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img class="d-block w-100" src="..." alt="First slide">
+                    </div>
+                    <div class="carousel-item">
+                      <img class="d-block w-100" src="..." alt="Second slide">
+                    </div>
+                    <div class="carousel-item">
+                      <img class="d-block w-100" src="..." alt="Third slide">
+                    </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div> -->
   </div>
 </template>
 
 <script>
+import store from '@/store/store.js'
+import { Service, Posts, User, auth } from '@/services/index.js'
 
+//import {PostService} from '@/services/index.js'
   export default {
+    name: 'Home',
     data(){
            
-
             return {
-              
-              posts,
-
+              posts: [],
+              error: '',
+              gradovi: [],
+              grad:'',
+              vrijednostZupanije: '',
+              cijenaOd: 0,
+              cijenaDo: 99999,
+              ljubimci: false,
+              dostupno: false,
+              terasa: false,
+              rezije: false,
+              soba : false,
+              store
             }
           },
-    computed: {
-      posts(){
-        return this.$store.state.posts
-      },
-
-      odabranaZupanija(value){
-        
-        Gradovi = $store.gradovi.filter((grad)=>(grad.zupanija==value))
-        
+    async created(){
+      try{
+        this.posts = await Posts.getAll();
+      }catch(err){
+        this.error = err.message;
       }
     },
     methods: {
-      onChangePage(pageOfItems){
-        this.pageOfItems = pageOfItems;
+      odabranaZupanija(){
+         this.gradovi = this.$store.gradovi.filter((grad) =>{
+           return grad.zupanija === parseInt(this.vrijednostZupanije)
+         })
+         console.log(this.grad);
       },
-      logout(){
-       // store.authenticated=false
-      }
+      
+      async primjeniFilter(){
+        try{
+          let res = await Posts.getAll()
+          this.posts = res
+          
+          let zupanijaStr = this.$store.zupanijeIdToStr[this.vrijednostZupanije]
+          if(zupanijaStr === '') {
+            this.posts = [];
+            return;
+          }           
+          if(zupanijaStr === undefined) zupanijaStr = '';
+
+          this.posts = this.posts.filter((post) =>{
+            
+            console.log("post:", post)
+
+            return post.cijena >= this.cijenaOd && post.cijena <= this.cijenaDo && 
+                  ((zupanijaStr.toLowerCase() === '') ? (true) : (post.zupanija === zupanijaStr.toLowerCase())) &&
+                  ((this.grad.toLowerCase() === '') ? (true) : (post.grad === this.grad.toLowerCase())) &&
+                  ((this.ljubimci === false) ? (true) : (post.ljubimci === this.ljubimci)) &&
+                  ((this.dostupno === false) ? (true) : (post.dostupnoGod === this.dostupno)) &&
+                  ((this.soba === false) ? (true) : (post.odvojenaSoba === this.soba)) &&
+                  ((this.rezije === false) ? (true) : (post.ukljuceneRezije === this.rezije)) &&
+                  ((this.terasa === false) ? (true) : (post.terasa === this.terasa));          
+        });
+        console.log("post: ",post.grad)
+
+        }catch(error){
+          console.log('error',  error)
+
+        }
+        
+      },
     },
      mounted() {
-
+     },
+     computed: {
+       
      },
     
           
@@ -127,10 +188,11 @@
 <style scoped lang="scss">
 
   .box {
-    height: 1200px;
+    height: 836px;
     width: 100%;
 
   }
+
   .filter {
     width: 270px;
     height: 600px;
@@ -208,13 +270,14 @@
     margin-bottom: 30px;
     background: white;
     opacity: 0.97;
+    text-transform: capitalize;
+    
+    text-align: justify;
 
-    //internet
-  
     position:relative;
-    overflow:hidden;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-
   label {
     margin-left: 15px;
   }
@@ -223,5 +286,8 @@
     color: inherit;
     text-decoration: none;
   }
+
+
+//https://www.w3schools.com/howto/howto_js_slideshow.asp
 
 </style>
